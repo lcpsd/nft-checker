@@ -18,10 +18,17 @@ export function Login(){
 
     async function handleFetchNfts(){
 
-        const mainnetNftsData = await Moralis.Web3.getNFTs()
+        // Get NFTs from Mainnet
+        const mainnetNftsData = await Moralis.Web3API.account.getNFTs({
+            chain: "eth",
+            address: currentUserAddress
+        })
         setMainnetNfts(mainnetNftsData)
         
-        const polygonNFTsData = await Moralis.Web3.getNFTs({chain: "matic", address: currentUserAddress})
+        // Get NFTs from Polygon
+        const polygonNFTsData = await Moralis.Web3API.account.getNFTs({
+            chain: "matic", address: currentUserAddress
+        })
         setPolygonNFTs(polygonNFTsData)
 
         console.log(mainnetNftsData)
@@ -31,7 +38,9 @@ export function Login(){
     return(
         <div>
             <button onClick={handleAuth}>Auth</button>
-            <button onClick={handleFetchNfts}>Fetch NFTs</button>
+            {
+                currentUserAddress && <button onClick={handleFetchNfts}>Fetch NFTs</button>
+            }
         </div>
     )
 }
